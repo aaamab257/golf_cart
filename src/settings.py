@@ -19,6 +19,7 @@ import os
 
 
 
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -32,7 +33,7 @@ SECRET_KEY = 'django-insecure-vz1@zbc@+122#8r9gn0nu093a%&84&*oqw183d5veecz%vlsjx
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = [ 'dj-golf-cart.herokuapp.com','localhost', '127.0.0.1',]
+ALLOWED_HOSTS = [ '*',]
 
 
 # Application definition
@@ -130,7 +131,9 @@ STATIC_URL = '/static/'
 
 STATIC_ROOT=os.path.join(BASE_DIR, 'staticfiles')
 
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATICFILES_DIRS=(os.path.join(BASE_DIR,'static'),)
+
+
 
 
 
