@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-vz1@zbc@+122#8r9gn0nu093a%&84&*oqw183d5veecz%vlsjx
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['127.0.0.1','golf-cart.com']
+ALLOWED_HOSTS = [ 'dj-golf-cart.herokuapp.com','localhost', '127.0.0.1',]
 
 
 # Application definition
@@ -46,7 +46,6 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -125,7 +124,6 @@ STATIC_URL = '/static/'
 
 STATIC_ROOT=os.path.join(BASE_DIR, 'staticfiles')
 
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
