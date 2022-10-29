@@ -7,11 +7,12 @@ from users.serializer import SendPasswordResetEmailSerializer, UserChangePasswor
 from django.contrib.auth import authenticate
 from users.renderers import UserRenderer
 from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication
+from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.authentication import SessionAuthentication, BasicAuthentication 
 import json
-from datetime import datetime
-
+from datetime import datetime 
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
 
 
 def get_tokens_for_user(user):    
@@ -20,6 +21,14 @@ def get_tokens_for_user(user):
         'refresh': str(refresh),
         'access': str(refresh.access_token),
     }
+
+class CsrfExemptSessionAuthentication(SessionAuthentication):
+
+    def enforce_csrf(self, request):
+        return  # To not perform the csrf check previously happening
+
+
+
 
 class UserRegistrationView(APIView):
     renderer_classes = [UserRenderer]
@@ -30,8 +39,9 @@ class UserRegistrationView(APIView):
       token = get_tokens_for_user(user)
       return Response({'token':token, 'msg':'Registration Successful'}, status=status.HTTP_201_CREATED)
 
-class UserLoginView(APIView):
+class UserLoginView(APIView):    
     renderer_classes = [UserRenderer]
+    authentication_classes= [CsrfExemptSessionAuthentication,BasicAuthentication]
     def post(self, request, format=None):
       serializer = UserLoginSerializer(data=request.data)
       serializer.is_valid(raise_exception=True)
@@ -42,7 +52,7 @@ class UserLoginView(APIView):
         token = get_tokens_for_user(user)
         json_str = json.dumps({user.date_of_birth}, default=str)
         return Response({'code':status.HTTP_200_OK ,'token':token, 'msg':'Login Success' ,
-        'user':{'is_admin':user.is_admin , 'tc':user.tc, 'birthdate':user.date_of_birth}})
+        'user':{'is_admin':user.is_admin , 'is_driver':user.is_driver ,'phone':user.phone_number, 'birthdate':user.date_of_birth}})
       else:
         return Response({'errors':{'non_field_errors':['Email or Password is not Valid']}}, status=status.HTTP_404_NOT_FOUND)
 
